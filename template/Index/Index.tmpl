@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>IADS Analysis Window Uploader</title>
+  <script lang="Javascript" src="/js/jquery-latest"></script>
+  <link rel="stylesheet" type="text/css" href="/site/css/xgrid.css"/>
+  <link rel="stylesheet" type="text/css" href="/site/css/page.css"/>
+  <link rel="stylesheet" type="text/css" href="/site/css/header.css"/>
+  <link rel="stylesheet" type="text/css" href="/site/css/table.css"/>
+  <link rel="stylesheet" type="text/css" href="/inst/css/header.css"/>
+  <link rel="stylesheet" type="text/css" href="/site/css/button.css"/>
+  <link rel="stylesheet" type="text/css" href="/mycss/textbubble.css"/>
+  <style>
+  div.loading {
+    margin:auto;
+    position:relative;
+    left:0px;
+    top:0px;
+    height:125px;
+    width:125px;
+    background-image: url('/inst/mms/resources/images/loading.gif');
+  }
+  div.aw_load {
+    background-image: url('/loading_ac.gif');
+    height:25px;
+    width:200px;
+  }
+  td.fname.valid{
+      color:green;
+      font-weight:bold;
+      max-width:725px;
+  }
+  td.fname {
+    padding:5px;
+  }
+  td.fname.invalid {
+      color: white;
+      background-color:red;
+      font-weight:bold;
+      text-decoration:blink;
+
+  }
+  td.fsize {
+    text-align:right;
+    padding:5px;
+  }
+  td.fbox {
+    text-align:center;
+  }
+  th {
+    text-align:center;
+  }
+  th.fsize, th.upload {
+    width:110px;
+  }
+  span.status {
+    font-family: "Courier New";
+    font-size: 1em;
+    font-weight:bold;
+  } 
+  span.warnings {
+    font-weight:bold;
+    overflow:scroll;
+    color:black;
+    background-color:yellow;
+  }
+  span.errors {
+    font-weight:bold;
+    background-color:red;
+    color:white;
+    text-decoration:blink;
+  }
+  </style>
+</head>
+<body>
+  <div class="line">
+    <div id="header">
+      <div class="line">
+        <div class="x2f">
+          <a href="/">
+            <img width="81" height="45" src="/site/icon/bftc_logo.png">
+          </a>
+          </div>
+          <div class="x5f">
+            <span class="title">IADS Analysis Window Uploader</span><br/>
+          </div>
+          <div style="text-align: right;" class="x8f end">
+            <a class="nav_link" href="/cgi-bin/inst/index.pl">Instrumentation Design</a>
+            <a class="nav_link" href="/cgi-bin/inst/ops/index.pl">Operations</a>
+            <a class="nav_link" href="/cgi-bin/feedback/index.pl">Feedbark</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="line">
+  <div class="x1f"><br></div>
+  <div style="clear:left;"></div>
+  <div style="clear:right;"></div>
+  <div style="width:80%;margin:0 auto;">
+    <div style="padding: 4px;" class="no_box" id='formdiv'>
+        <form 
+          method="post" 
+          style="text-align:center;" 
+          action="[% APPLICATION.SUITE.INDEX %]/FileUploadAJAX" 
+          enctype="multipart/form-data" 
+          name="theform"
+          id="theform"
+          target="fileframe"
+        >
+          <table id="tableone">
+            <thead>
+              <tr>
+                <th> Choose IADS Analysis Window to upload <br/>
+                  <span style="color:blue; font-size: .7em; font-weight: normal;">
+                      <b>This is for uploading IADS Analysis Windows</b>
+                      <br/>
+                  </span>
+                </th>
+              </tr>
+              <tr>
+                <td style="text-align:center;padding:10px;"><div class="redbox" style="font-size:2.1em;width:80%;margin:auto;"><div id="FILE" style="margin:10px;">Choose File to Upload</div><input id="fupload" style="margin:5px;background:#d81b21;color:white;" type="file" name="filenames" size="35" multiple="true"  /></div>
+              </tr> 
+              <tr>
+                <td style="padding:5px;">
+                  <span style="color:blue;">
+                    <b>Aircraft</b>
+                    <select id="ac_select" name="aircraft">
+                        <option value="null">Select FTV</option>
+                        [% FOREACH ac IN aircraft %]
+                        <option value="[% ac %]">[% ac %]</option>[% END %]
+                    </select>
+                  </span>
+              </tr>
+              <tr>
+                <td><input type="button" id="Upload_AW" value="Scan AW(s)" class="red button" style="margin:5px;" /> <input type="reset" name="reset" class="red button" style="margin:5px;"/>
+              </tr>
+              <input type="hidden" name="debug" value="[% debug %]"><input type="hidden" name="action" value="upload">
+          </table>
+        </form>
+        <div style="padding:4px;display:none;" class="no_box" id="status"></div>
+    </div>
+  </div>
+</body>
+[% INCLUDE Index/jscript.tmpl %]
+</html>

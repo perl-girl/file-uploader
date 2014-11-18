@@ -1,0 +1,137 @@
+<script>
+  var count = 0;
+  $(document).ready(function() {
+    //iframe for faux-AJAX file upload to support the wonder that is IE8
+    $("<iframe name='fileframe' style='display:none;width:0;height:0;'></iframe>").insertBefore("#formdiv");
+    $("iframe").load( function() {
+
+      //get the temp directory the files to which the files were uploaded
+      var outdir = $("iframe").contents().find("#outdir").text().split('/').slice(-1);
+
+      //ignore the first time the iframe loads
+      count++;
+
+      if (count > 1) {
+        // not sure why, but somehow '[]' is being appended to 'tempdir' in the data section of 
+        // this getJSON call, or at least that's how Perl sees it on the backend when looking
+        // at the CGI vars
+        $.getJSON(
+          '[% APPLICATION.SUITE.INDEX %]/FileInfoAJAX', 
+          {'tempdir': outdir}, 
+          function(data) {
+            $("div.loading").remove();
+            //delete the contents of the status element in case the user either uploads different
+            //files instead or re-uploads the same files
+            //display the status element
+            $("#status").css("display", "block");
+            $("#status").css("visible", "true");
+            $("#status").css("height", "50px");
+            //create the file status table
+            $("#status").append("<table id='aw_info'></table>");
+            $("#status table").append(
+              "<tr><th>Filename</th>" + 
+              "<th class='fsize'>Size</th>" + 
+              "<th class='upload'>Upload?</th></tr>"
+            );
+            $.each( data.aws, function(idx) {
+              var fclass = 'fname valid';
+              var check = "disabled='true'";
+              $("#status table").append(
+                "<tr class='finfo'" +  
+                " name='" + 
+                data.aws[idx].name + 
+                "'><td class='" + fclass +  "'>" + 
+                data.aws[idx].name + 
+                "</td><td class='fsize'>" + 
+                data.aws[idx].size +  
+                "</td><td class='fbox'><input type='checkbox' " + 
+                check + 
+                "  /></td></tr>"
+              );
+            });
+            var errors = new Array;
+            $.each( data.errors, function(idx) {
+              errors.push(data.errors[idx]);
+            });
+            if (errors.length > 0) {
+              alert(errors);
+            }
+            $("td.fname").each(
+              function() {
+                var this1 = $(this);
+                var AW = this1.html();
+                this1.append("<div class='aw_load'></div>");
+                $.getJSON(
+                  '[% APPLICATION.SUITE.INDEX %]/FileScanAJAX', 
+                  {'AW' : AW }, 
+                  function(data) {
+                    if (data.warnings.length > 0) {
+                      var warnings = data.warnings.join(", ");
+                      this1.append(
+                        "<br><span class='status warnings'>" +
+                        "Warning! Following Parameter(s) Unavailable in TM:<br>" + 
+                        warnings +
+                        "</span>");
+                    }
+                    if (data.errors.length > 0) {
+                      var errors = data.errors.join(", ");
+                      this1.append(
+                        "<br><span class='status errors'>" +
+                        "Error! Following Parameter(s) Unavailable on AC:<br>" + 
+                        errors +
+                        "</span>");
+                    }
+                    else {
+                      $("tr[name=" + AW + "]").find("input[type=checkbox]").attr("disabled", false);
+                        if (data.warnings.length == 0) {
+                          $("tr[name=" + AW + "]").find("input[type=checkbox]").attr("checked", "checked");
+                        }
+                    }
+                    this1.find("div.aw_load").remove();
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    });
+  });
+
+  $("#Upload_AW").click(function(fupload) {
+    var AWfiles = $("#fupload")[0].files;
+
+    if ($("#ac_select").val() == "null") {
+      alert("Please select an FTV!");
+    }
+    else {
+      if (AWfiles) {
+        var badfiles = new Array;
+        var AWreg = /\.iadsAw(\.zip)?$/;
+        for (var i = 0; i < AWfiles.length; i++) {
+          if (!AWreg.test(AWfiles[i].name)) {
+            badfiles.push(AWfiles[i].name);
+          }
+        }
+        if (badfiles.length > 0) {
+          var fstring = "The following files are invalid: " +
+            badfiles.join() + "\nPlease choose valid IADS Analysis Window files!";
+          alert(fstring);
+          return;
+        }
+      }
+      else if ($("#fupload").val() == "") {
+        alert("Please choose a file to upload!");
+      }
+      if ( !( /\.iadsAw(\.zip)?$/.test( $("#fupload").val() ) ) ) {
+        alert("Not a valid IADS Analysis Window File!");
+        return;
+      }
+      $("#formdiv").append("<div class='loading'></div>");
+      $("#status").html("");
+      $("#theform").submit();
+    }
+  });
+
+
+</script>
