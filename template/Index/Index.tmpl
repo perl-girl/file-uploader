@@ -14,6 +14,24 @@
     width:125px;
     background-image: url('[% APPLICATION.RESOURCES %]/images/loading.gif');
   }
+  #filedrag {
+    display:none;
+    font-weight: bold;
+    text-align: center;
+    padding: 1em 0;
+    margin: 1em 0;
+    color: #555;
+    border: 2px dashed #555;
+    border-radius: 7px;
+    cursor: default;
+  }
+
+  #filedrag.hover {
+    color: #f00;
+    border-color: #f00;
+    border-style:       solid;
+    box-shadow: inset 0 3px 4px #888;
+  }
   div.file_load {
     background-image: url('[% APPLICATION.RESOURCES %]/images/loading.gif');
     width:125px;
@@ -110,10 +128,19 @@
                 </th>
               </tr>
               <tr>
-                <td style="text-align:center;padding:10px;"><div class="col-sm-12" style="font-size:2.1em;"><div id="FILE" style="margin:10px;">Choose File to Upload</div></div>
-              </tr>
-              <tr>
-                <td><div class="redbox" style="font-size:1.1em;margin:auto;"><input id="fupload" style="margin:0 auto;background:#d81b21;color:white;" type="file" name="filenames" size="35" multiple="true" /></div>
+                <td>
+                  <div class="redbox" style="font-size:1.1em;margin:auto;">
+                    <label for="fupload">Files to upload:</label>
+                    <input 
+                      id="fupload" 
+                      style="margin:0 auto;background:#d81b21;color:white;" 
+                      type="file" 
+                      name="filenames" 
+                      size="35" 
+                      multiple="true" 
+                    />
+                  </div>
+                  <div id="filedrag">or drop files here</div>
               </tr> 
               <tr>
                 <td><input type="button" id="Upload_FILE" value="Scan File(s)" class="red button" style="margin:5px;" /> <input type="reset" name="reset" class="red button" style="margin:5px;"/>
@@ -122,8 +149,87 @@
           </table>
         </form>
         <div style="padding:4px;display:none;" class="no_box" id="status"></div>
+       <!-- <div id="messages">
+          <p>Status Messages</p>
+        </div>
+       -->
     </div>
   </div>
 </body>
+<script>
+  
+// getElementById
+function get_id(id) {
+  return document.getElementById(id);
+}
+  
+// output information
+function Output(msg) {
+//  var m = get_id("messages");
+//  m.innerHTML = msg + m.innerHTML;
+} 
+
+// call initialization file
+if (window.File && window.FileList && window.FileReader) {
+  Init();
+}
+
+// initialize
+function Init() {
+
+  var fileselect = get_id("fupload"),
+    filedrag = get_id("filedrag");
+    submitbutton = get_id("Upload_FILE");
+    console.log(filedrag);
+    //console.log(submitbutton);
+            
+    // file select
+    fileselect.addEventListener("change", FileSelectHandler, false);
+    
+    // is XHR2 available?
+    var xhr = new XMLHttpRequest();
+    if (xhr.upload) {
+
+      // file drop
+      filedrag.addEventListener("dragover", FileDragHover, false);
+      filedrag.addEventListener("dragleave", FileDragHover, false);
+      filedrag.addEventListener("drop", FileSelectHandler, false);
+      filedrag.style.display = "block";
+
+      // remove submit button
+      // submitbutton.style.display = "none";
+    }
+}
+// file drag hover
+function FileDragHover(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  e.target.className = (e.type == "dragover" ? "hover" : "");
+}
+// file selection
+function FileSelectHandler(e) {
+
+// cancel event and hover styling
+  FileDragHover(e);
+  
+  // fetch FileList object
+  var files = e.target.files || e.dataTransfer.files;
+        
+  // process all File objects
+  for (var i = 0, f; f = files[i]; i++) {
+    ParseFile(f);
+  }
+}
+
+function ParseFile(file) {
+
+Output(   "<p>File information: <strong>" + file.name +
+          "</strong> type: <strong>" + file.type +
+          "</strong> size: <strong>"+ file.size +
+          "</strong> bytes</p>");
+
+}
+
+</script>
 [% INCLUDE Index/jscript.tmpl %]
 </html>

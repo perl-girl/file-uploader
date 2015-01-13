@@ -13,6 +13,7 @@ use File::Basename;
 use File::Path qw/remove_tree/;
 use DBI;
 use JSON;
+use YAML::XS;
 use strict;
 
 our $logger = Log::Log4perl->get_logger();
@@ -55,20 +56,24 @@ sub FileUploadAJAX : Runmode {
         $files = [$files];
     }
 
+
     my $outdir = ApplicationSettings::GetSettings('FILE_REPO');
+
 
 # save temp directory to session
     $self->session->param("outdir", $outdir);
 
+    my @flist;
+
 # write uploaded files to temp directory
     foreach my $file (@$files) {
         my $fname = $file;
+        push @flist, "$fname";
 # because IE8 uses the absolute path as the filename, 
 # and it's fewer lines than using File::Basename
         $fname =~ s/[a-zA-Z]:.*\\//;
 
         open my $fh, ">", "$outdir/$fname" or $logger->fatal("Unable to create file $! $@");
-        $logger->debug("$outdir/$fname");
         binmode $fh;
 
         while (<$file>) {
@@ -77,6 +82,8 @@ sub FileUploadAJAX : Runmode {
 
         close $fh;
     }
+    $self->session->param("files", YAML::XS::Dump(@flist));
+
 # originally got the output directory from the iframe, but now it's
 # saved in the CGI session, so this is kinda redundant...
 }
@@ -91,13 +98,13 @@ sub FileInfoAJAX : Runmode {
     my $data;
 
 
-    my @files = Rule->file->in($outdir);
+    my @files = YAML::XS::Load($self->session->param('files'));
 
     $data->{files} = [];
 
 # Get the file info and return it to the page
     foreach my $file (@files) {
-        my @stats = stat $file;
+        my @stats = stat "$outdir/$file";
         push(
             @{$data->{files}}, 
             {
