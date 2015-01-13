@@ -29,9 +29,9 @@
             //create the file status table
             $("#status").append("<table id='file_info' class='table'></table>");
             $("#status table").append(
-              "<tr><th class='col-sm-7 text-center'>Filename</th>" + 
+              "<tr><th class='col-sm-7 text-left'>Filename</th>" + 
               "<th class='fsize col-sm-3 text-center'>Size</th>" + 
-              "<th class='upload col-sm-2 text-center'>Upload?</th></tr>"
+              "<th class='upload col-sm-2 text-center'>Uploaded</th></tr>"
             );
             $.each( data.files, function(idx) {
               var fclass = 'fname valid';
@@ -39,12 +39,11 @@
                 "<tr class='finfo'" +  
                 " name='" + 
                 data.files[idx].name + 
-                "'><td class='" + fclass + 'col-sm-7 text-center' + "'>" + 
+                "'><td class='" + fclass + 'col-sm-7 text-left' + "'>" + 
                 data.files[idx].name + 
                 "</td><td class='fsize col-sm-3' style='text-align:center;'>" + 
                 data.files[idx].size +  
-                "</td><td class='fbox col-sm-2'><input type='checkbox' " + 
-                "  /></td></tr>"
+                "</td><td class='col-sm-2' style='text-align:center'><div style='margin:0 auto;'><img width='25px' height='25px' src='[% APPLICATION.RESOURCES %]/images/check_mark_green_circle.png' /></div></td></tr>"
               );
             });
             var errors = new Array;

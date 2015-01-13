@@ -55,22 +55,20 @@ sub FileUploadAJAX : Runmode {
         $files = [$files];
     }
 
-    my $outdir = ApplicationSettings::GetSettings('FILE_REPO') . 
-        (int(rand(131072)) + 131072);
-    mkdir $outdir or $logger->logdie("Didn't make temp directory $outdir $! $@");
+    my $outdir = ApplicationSettings::GetSettings('FILE_REPO');
 
 # save temp directory to session
     $self->session->param("outdir", $outdir);
 
 # write uploaded files to temp directory
     foreach my $file (@$files) {
-	$logger->debug("$file");
         my $fname = $file;
 # because IE8 uses the absolute path as the filename, 
 # and it's fewer lines than using File::Basename
         $fname =~ s/[a-zA-Z]:.*\\//;
 
-        open my $fh, ">", "$outdir/$fname";
+        open my $fh, ">", "$outdir/$fname" or $logger->fatal("Unable to create file $! $@");
+        $logger->debug("$outdir/$fname");
         binmode $fh;
 
         while (<$file>) {
