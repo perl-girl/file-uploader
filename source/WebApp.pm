@@ -1,4 +1,4 @@
-# Analysis Window Uploader
+# File Uploader
 # ########################################################################### #
 # Web Application Framework / Base Class
 # Implementation code
@@ -16,7 +16,7 @@ use CGI::Application::Plugin::TT;
 use CGI::Application::Plugin::Session;
 use CGI;
 
-$CGI::POST_MAX = 1024 * 100000;
+$CGI::POST_MAX = 1024 * 1000000;
 
 # setup & enable logging
 use Log::Log4perl;
@@ -73,6 +73,8 @@ sub setup {
             LOCATION => GetSettings("LOCATION"),
             JQUERY => GetSettings("JQUERY"),
             RESOURCES => GetSettings("RESOURCES"),
+            BOOTCSS  => GetSettings("BOOTCSS"),
+            BOOTJS  => GetSettings("BOOTJS"),
             UPLOAD => GetSettings("UPLOAD"),
             FULLNAME => GetSettings("FULLNAME"),
             VERSION => GetSettings("VERSION"),

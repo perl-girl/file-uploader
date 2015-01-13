@@ -2,29 +2,22 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>IADS Analysis Window Uploader</title>
-  <script lang="Javascript" src="/js/jquery-latest"></script>
-  <link rel="stylesheet" type="text/css" href="/site/css/xgrid.css"/>
-  <link rel="stylesheet" type="text/css" href="/site/css/page.css"/>
-  <link rel="stylesheet" type="text/css" href="/site/css/header.css"/>
-  <link rel="stylesheet" type="text/css" href="/site/css/table.css"/>
-  <link rel="stylesheet" type="text/css" href="/inst/css/header.css"/>
-  <link rel="stylesheet" type="text/css" href="/site/css/button.css"/>
-  <link rel="stylesheet" type="text/css" href="/mycss/textbubble.css"/>
+  <title>Generic File Uploader</title>
+  [% INCLUDE resources/includes.tmpl %]
   <style>
   div.loading {
     margin:auto;
     position:relative;
     left:0px;
     top:0px;
-    height:125px;
+    height:21px;
     width:125px;
-    background-image: url('/inst/mms/resources/images/loading.gif');
+    background-image: url('[% APPLICATION.RESOURCES %]/images/loading.gif');
   }
-  div.aw_load {
-    background-image: url('/loading_ac.gif');
-    height:25px;
-    width:200px;
+  div.file_load {
+    background-image: url('[% APPLICATION.RESOURCES %]/images/loading.gif');
+    width:125px;
+    height:21px;
   }
   td.fname.valid{
       color:green;
@@ -36,10 +29,8 @@
   }
   td.fname.invalid {
       color: white;
-      background-color:red;
       font-weight:bold;
       text-decoration:blink;
-
   }
   td.fsize {
     text-align:right;
@@ -52,7 +43,6 @@
     text-align:center;
   }
   th.fsize, th.upload {
-    width:110px;
   }
   span.status {
     font-family: "Courier New";
@@ -71,35 +61,35 @@
     color:white;
     text-decoration:blink;
   }
+  div.fileinputs {
+    position: relative;
+  }
+
+  div.fakefile {
+    position: absolute;
+    top:position 0px;
+    left: 0px;
+    z-index: 1;
+  }
+
+  input.file {
+    position: relative;
+    text-align: right;
+    -moz-opacity:0 ;
+    filter:alpha(opacity: 0);
+    opacity:filter 0;
+    z-index: 2;
+  }
+
   </style>
-</head>
+</head> 
 <body>
   <div class="line">
-    <div id="header">
-      <div class="line">
-        <div class="x2f">
-          <a href="/">
-            <img width="81" height="45" src="/site/icon/bftc_logo.png">
-          </a>
-          </div>
-          <div class="x5f">
-            <span class="title">IADS Analysis Window Uploader</span><br/>
-          </div>
-          <div style="text-align: right;" class="x8f end">
-            <a class="nav_link" href="/cgi-bin/inst/index.pl">Instrumentation Design</a>
-            <a class="nav_link" href="/cgi-bin/inst/ops/index.pl">Operations</a>
-            <a class="nav_link" href="/cgi-bin/feedback/index.pl">Feedbark</a>
-          </div>
-        </div>
-      </div>
-    </div>
+            <h1 class='col-sm-12 text-center'>File Uploader</h1><br/>
   </div>
-  <div class="line">
-  <div class="x1f"><br></div>
-  <div style="clear:left;"></div>
-  <div style="clear:right;"></div>
-  <div style="width:80%;margin:0 auto;">
-    <div style="padding: 4px;" class="no_box" id='formdiv'>
+  <div style="clear:both;"></div>
+  <div class='col-sm-12'>
+    <div style="padding: 4px;" class="col-sm-12" id='formdiv'>
         <form 
           method="post" 
           style="text-align:center;" 
@@ -109,32 +99,24 @@
           id="theform"
           target="fileframe"
         >
-          <table id="tableone">
+          <table id="tableone" class='table'>
             <thead>
               <tr>
-                <th> Choose IADS Analysis Window to upload <br/>
+                <th> Choose file(s) to upload <br/>
                   <span style="color:blue; font-size: .7em; font-weight: normal;">
-                      <b>This is for uploading IADS Analysis Windows</b>
+                      <b>This is for uploading files</b>
                       <br/>
                   </span>
                 </th>
               </tr>
               <tr>
-                <td style="text-align:center;padding:10px;"><div class="redbox" style="font-size:2.1em;width:80%;margin:auto;"><div id="FILE" style="margin:10px;">Choose File to Upload</div><input id="fupload" style="margin:5px;background:#d81b21;color:white;" type="file" name="filenames" size="35" multiple="true"  /></div>
-              </tr> 
-              <tr>
-                <td style="padding:5px;">
-                  <span style="color:blue;">
-                    <b>Aircraft</b>
-                    <select id="ac_select" name="aircraft">
-                        <option value="null">Select FTV</option>
-                        [% FOREACH ac IN aircraft %]
-                        <option value="[% ac %]">[% ac %]</option>[% END %]
-                    </select>
-                  </span>
+                <td style="text-align:center;padding:10px;"><div class="col-sm-12" style="font-size:2.1em;"><div id="FILE" style="margin:10px;">Choose File to Upload</div></div>
               </tr>
               <tr>
-                <td><input type="button" id="Upload_AW" value="Scan AW(s)" class="red button" style="margin:5px;" /> <input type="reset" name="reset" class="red button" style="margin:5px;"/>
+                <td><div class="redbox" style="font-size:1.1em;margin:auto;"><input id="fupload" style="margin:0 auto;background:#d81b21;color:white;" type="file" name="filenames" size="35" multiple="true" /></div>
+              </tr> 
+              <tr>
+                <td><input type="button" id="Upload_FILE" value="Scan File(s)" class="red button" style="margin:5px;" /> <input type="reset" name="reset" class="red button" style="margin:5px;"/>
               </tr>
               <input type="hidden" name="debug" value="[% debug %]"><input type="hidden" name="action" value="upload">
           </table>

@@ -1,4 +1,4 @@
-# Measurement Management System
+# File Uploader
 # ########################################################################### #
 # Application Settings Module
 # $Id: ApplicationSettings.pm.default 688 2014-08-18 15:20:36Z eberman $
@@ -17,10 +17,10 @@ BEGIN {
 my %SETTINGS = (
     #This is needed for async jobs that don't have     
     #access to environment info
-    SERVER  => 'http://erics.bftc.learjet.com',
+    SERVER  => 'http://eberman.na.xerox.net',
 
-    APP_PATH => '/mnt/ua1/dev_envs/erics/inst/ops/iads_aw_upload',
-    APP_URL  => '/inst/ops/iads_aw_upload',
+    APP_PATH => '/var/www/html/uploader/',
+    APP_URL  => '/uploader/',
     
     DEBUG_MODE => 1,
 
@@ -36,11 +36,13 @@ my %SETTINGS = (
     },
 
     # resource file locations
-    RESOURCES => "/inst/ops/iads_aw_upload/resources",
-    JQUERY    => "/js/jquery-1.7.2.min.js",
+    RESOURCES => "/resources",
+    JQUERY    => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js",
+    BOOTCSS   => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css",
+    BOOTJS    => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js",
 
     # application information
-    FULLNAME => "IADS Analysis Window Uploader",
+    FULLNAME => "File Uploader",
     VERSION => "1.0",
 
     # location stuff
@@ -49,7 +51,8 @@ my %SETTINGS = (
     },
 
     # file repository
-    FILE_REPO   => '/mnt/ua1/dev_envs/erics/inst/ops/iads_aw_upload/tempfiles/',
+    FILE_REPO   => '/tmp/',
+    TEMP_REPO   => '/tmp/',
     FILE_MAGIK  => '/usr/bin/file -ib',
     UMASK       => 0113,
 
