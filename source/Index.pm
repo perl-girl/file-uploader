@@ -10,8 +10,6 @@ use lib '.';
 use base 'WebApp';
 use aliased 'File::Find::Rule';
 use File::Basename;
-use File::Path qw/remove_tree/;
-use DBI;
 use JSON;
 use YAML::XS;
 use strict;
@@ -39,11 +37,7 @@ sub Index : StartRunmode {
     return $self->tt_process($data);
 }
 
-
-# Technically not a true AJAX call as it's called using a hidden iframe 
-# to support the wonderful browser known affectionately as Internet 
-# Exploder 8 which is unable to upload files using AJAX
-
+#Was not a true ajax call because it was called via an iframe, but now it is :D
 sub FileUploadAJAX : Runmode {
     
     my $self = shift;

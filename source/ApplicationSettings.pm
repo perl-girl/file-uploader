@@ -51,7 +51,7 @@ my %SETTINGS = (
     },
 
     # file repository
-    FILE_REPO   => '/var/www/html/uploads/',
+    FILE_REPO   => '/var/www/html/files/',
     TEMP_REPO   => '/tmp/',
     FILE_MAGIK  => '/usr/bin/file -ib',
     UMASK       => 0113,

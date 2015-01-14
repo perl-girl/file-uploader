@@ -15,14 +15,14 @@ use CGI::Application::Plugin::AutoRunmode;
 use CGI::Application::Plugin::TT;
 use CGI::Application::Plugin::Session;
 use CGI;
+use Data::Dumper;
 
-$CGI::POST_MAX = 1024 * 1000000;
+$CGI::POST_MAX = 1024 * 100000;#max upload of 100MB... for now!
 
 # setup & enable logging
 use Log::Log4perl;
 Log::Log4perl->init(GetSettings("APP_PATH")."/source/log4perl.conf");
 
-use Data::Dumper;
 
 
 sub setup {
