@@ -1,0 +1,16 @@
+.bubble { 
+  width: 100px;
+  display: table; 
+  position:relative;
+}
+
+.bubble p { 
+  display: table-cell; 
+  vertical-align: middle; 
+  text-align: center; 
+}
+.bubble a { 
+  display: table-cell; 
+  vertical-align: middle; 
+  text-align: center; 
+}

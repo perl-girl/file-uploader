@@ -1,0 +1,71 @@
+ul.topnav {
+    list-style: none;
+    padding: 0 20px;    
+    margin: 0;
+    float: left;
+    width: 920px;
+    background: #222;
+    font-size: 1.2em;
+    background: url(/images/topnav_bg.gif) repeat-x;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+        src="/images/topnav_bg.gif",
+        sizingMethod='scale');
+}
+ul.topnav li {
+    float: left;
+    position: relative; /*--Declare X and Y axis base for sub navigation--*/
+}
+ul.topnav li a{
+    padding: 10px 15px 10px 15px;
+    color: #fff;
+    display: block;
+    text-decoration: none;
+    float: left;
+}
+ul.topnav+li+a:hover, 
+ul.topnav li.subhover {
+    background: url(/images/topnav_hover.gif) no-repeat center top;
+    background-size:100% 100%;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+        src="/images/topnav_hover.gif",
+        sizingMethod='scale');
+}
+
+ul.topnav li ul.subnav {
+    list-style: none;
+    position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
+    left: 0; top: 35px;
+    background: #333;
+    margin: 0; padding: 0;
+    display: none;
+    float: left;
+    width: 150px;
+    border: 1px solid #111;
+}
+ul.subsubnav,
+ul.subsubsubnav {
+    list-style: none;
+    position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
+    left: 150px; top: 0px;
+    background: #333;
+    margin: 0; padding: 0;
+    display: none;
+    float: left;
+    width: 150px;
+    border: 1px solid #111;
+}
+ul.subnav li{
+    border-top: 1px solid #252525; /*--Create bevel effect--*/
+    border-bottom: 1px solid #444; /*--Create bevel effect--*/
+    clear: both;
+    width: 150px;
+}
+ul.subnav li a {
+    font-size: 0.8em;
+    background: #333 ;
+    background-size: 150% 150%;
+}
+ul.subnav li a:hover { /*--Hover effect for subnav links--*/
+    background: #222 ; 
+    width: 80%
+}
