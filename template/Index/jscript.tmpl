@@ -1,77 +1,12 @@
 <script>
   var count = 0;
   $(document).ready(function() {
-    //iframe for faux-AJAX file upload to support the wonder that is IE8
-    $("<iframe name='fileframe' style='display:none;width:0;height:0;'></iframe>").insertBefore("#formdiv");
-    $("iframe").load( function() {
-
-      //get the temp directory the files to which the files were uploaded
-      var outdir = $("iframe").contents().find("#outdir").text().split('/').slice(-1);
-
-      //ignore the first time the iframe loads
-      count++;
-
-      if (count > 1) {
-        // not sure why, but somehow '[]' is being appended to 'tempdir' in the data section of 
-        // this getJSON call, or at least that's how Perl sees it on the backend when looking
-        // at the CGI vars
-        $.getJSON(
-          '[% APPLICATION.SUITE.INDEX %]/FileInfoAJAX', 
-          {'tempdir': outdir}, 
-          function(data) {
-            $("div.loading").remove();
-            //delete the contents of the status element in case the user either uploads different
-            //files instead or re-uploads the same files
-            //display the status element
-            $("#status").css("display", "block");
-            $("#status").css("visible", "true");
-            $("#status").css("height", "50px");
-            //create the file status table
-            $("#status").append("<table id='file_info' class='table'></table>");
-            $("#status table").append(
-              "<tr><th class='col-sm-7 text-left'>Filename</th>" + 
-              "<th class='fsize col-sm-3 text-center'>Size</th>" + 
-              "<th class='upload col-sm-2 text-center'>Uploaded</th></tr>"
-            );
-            $.each( data.files, function(idx) {
-              var fclass = 'fname valid';
-              $("#status table").append(
-                "<tr class='finfo'" +  
-                " name='" + 
-                data.files[idx].name + 
-                "'><td class='" + fclass + 'col-sm-7 text-left' + "'>" + 
-                data.files[idx].name + 
-                "</td><td class='fsize col-sm-3' style='text-align:center;'>" + 
-                data.files[idx].size +  
-                "</td><td class='col-sm-2' style='text-align:center'><div style='margin:0 auto;'><img width='25px' height='25px' src='[% APPLICATION.RESOURCES %]/images/check_mark_green_circle.png' /></div></td></tr>"
-              );
-            });
-            var errors = new Array;
-            $.each( data.errors, function(idx) {
-              errors.push(data.errors[idx]);
-            });
-            if (errors.length > 0) {
-              alert(errors);
-            }
-            $("td.fname").each(
-              function() {
-                var this1 = $(this);
-                var FILE = this1.html();
-                this1.append("<div class='file_load'></div>");
-                $.getJSON(
-                  '[% APPLICATION.SUITE.INDEX %]/FileScanAJAX', 
-                  {'FILE' : FILE }, 
-                  function(data) {
-                    $("tr[name=" + FILE + "]").find("input[type=checkbox]").attr("checked", "checked");
-                    this1.find("div.file_load").remove();
-                  }
-                );
-              }
-            );
-          }
-        );
-      }
-    });
+    $("#status").append("<table id='file_info' class='table'></table>");
+    $("#status table").append(
+                "<tr><th class='col-sm-7 text-left'>Filename</th>" + 
+                "<th class='fsize col-sm-3 text-center'>Size</th>" + 
+                "<th class='upload col-sm-2 text-center'>Uploaded</th></tr>"
+    );
   });
 
   $("#Upload_FILE").click(function(fupload) {
