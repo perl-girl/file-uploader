@@ -1,0 +1,58 @@
+<Files ~ "\.(pl|cgi)$">
+    SetHandler perl-script
+    PerlResponseHandler ModPerl::PerlRun
+    Options +ExecCGI
+    PerlSendHeader On
+</Files>
+
+<Directory />
+    Options FollowSymLinks
+    AllowOverride None
+</Directory>
+<Directory [path-to-store-your-website-files-like-.html-(perl-scripts-should-be-stored-in-cgi-bin] >
+####(the perl/cgi scripts can be stored out of the cgi-bin directory, but thats a story for another day. Lets concentrate on washing out the issue at hand)
+####
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+</Directory>
+
+ScriptAlias /cgi-bin/ [path-where-you-want-your-.pl-and-.cgi-files]
+
+<Directory [path-where-you-want-your-.pl-and-.cgi-files]>
+    AllowOverride None
+    Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    AddHandler cgi-script .pl
+    Order allow,deny
+    allow from all
+</Directory>
+<Files ~ "\.(pl|cgi)$">
+    SetHandler perl-script
+    PerlResponseHandler ModPerl::PerlRun
+    Options +ExecCGI
+    PerlSendHeader On
+</Files>
+
+<Directory />
+    Options FollowSymLinks
+    AllowOverride None
+</Directory>
+<Directory [path-to-store-your-website-files-like-.html-(perl-scripts-should-be-stored-in-cgi-bin] >
+####(the perl/cgi scripts can be stored out of the cgi-bin directory, but thats a story for another day. Lets concentrate on washing out the issue at hand)
+####
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+</Directory>
+
+ScriptAlias /cgi-bin/ [path-where-you-want-your-.pl-and-.cgi-files]
+
+<Directory [path-where-you-want-your-.pl-and-.cgi-files]>
+    AllowOverride None
+    Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    AddHandler cgi-script .pl
+    Order allow,deny
+    allow from all
+</Directory>
